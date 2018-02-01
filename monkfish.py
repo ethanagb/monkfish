@@ -3,20 +3,20 @@
 
 import pandas as pd
 import numpy as np
-from random import shuffle
+import random
 print("\nLoading data...\n")
 
 ##################################################
 ###YOU CAN CHANGE THE NAME OF DATA FILE HERE!!!###
-data = pd.read_csv('preferences.csv', header=0)###
+data = pd.read_csv('preferences2.csv', header=0,encoding="utf-8-sig")###
 ##################################################
 
 ####################
 ##SET THE CAP HERE##
-cap = 3
+cap = 7
 ####################
 
-dinner = data.loc[:,'Name':'VeggieGalaxy']
+dinner = data.loc[:,'Name':'SmokeShop']
 brunch = data.loc[:,'Area4':]
 names = data['Name']
 brunch = pd.concat([names,brunch], axis=1)
@@ -34,7 +34,7 @@ names = data['Name'].tolist()
 assigned = []
 unassigned = []
 
-assignmentLists = [kika,thelonious,smokeshop,ole,meadhall,indiapav,veggieGalaxy]
+assignmentLists = [indiapav,thelonious,meadhall,kika,ole,smokeshop]
 restaurantNames = dinner.columns[1:].tolist()
 assignmentDict = dict(zip(restaurantNames, assignmentLists))
 zeroes = [0]*len(names)
@@ -59,13 +59,13 @@ def dinnerCapacityCheck():
     dinnerFull = []
     for rest in restaurantNames:
         if len(assignmentDict[rest]) > cap:
-            print(str(rest) + ' is overassigned')
+            #print(str(rest) + ' is overassigned')
             dinnerOverassigned.append(rest)
         elif len(assignmentDict[rest]) < cap:
-            print(str(rest) + ' is underassigned')
+            #print(str(rest) + ' is underassigned')
             dinnerUnderassigned.append(rest)
         elif len(assignmentDict[rest]) == cap:
-            print(str(rest) + ' is full')
+            #print(str(rest) + ' is full')
             dinnerFull.append(rest)
     return dinnerOverassigned, dinnerUnderassigned, dinnerFull
 dinnerOverassigned, dinnerUnderassigned, dinnerFull = dinnerCapacityCheck()
@@ -132,15 +132,17 @@ elif len(dinnerOverassigned) > 0 and dinnerDone==False:
     for rest in dinnerOverassigned:
         dinnerList = assignmentDict[rest]
         bumpNum = len(dinnerList)-cap
-        bumpOrder = random.shuffle(dinnerList) #want to preferentially bump people who haven't yet been bumped.
+        bumpOrder = []
+        bumpOrder = random.sample(dinnerList, len(dinnerList)) #want to preferentially bump people who haven't yet been bumped.
         gotBumped = []
-        for x in bumpOrder:
-            if len(gotBumped) == bumpNum:
-                break
-            if preferenceScoreDict[x] == 1:
-                gotBumped.append(x)
-            else:
-                continue
+        if len(bumpOrder) > 0:
+            for x in bumpOrder:
+                if len(gotBumped) == bumpNum:
+                    break
+                if preferenceScoreDict[x] == 1:
+                    gotBumped.append(x)
+                else:
+                    continue
         for b in gotBumped:
             assignmentDict[rest].remove(b) #kick that dude out
             assigned.remove(b) #mark them unassigned
@@ -191,11 +193,12 @@ RusselHouse =[]
 Christophers = []
 Ryles = []
 CambridgeCommons = []
+veggieGalaxy = []
 
 assigned = []
 unassigned = []
 
-assignmentLists = [Area4,PaintedBurro,RusselHouse,Christophers,Ryles,CambridgeCommons]
+assignmentLists = [Area4,CambridgeCommons,Christophers,PaintedBurro,Ryles,veggieGalaxy,RusselHouse]
 restaurantNames = brunch.columns[1:].tolist()
 assignmentDict = dict(zip(restaurantNames, assignmentLists))
 
@@ -218,13 +221,13 @@ def brunchCapacityCheck():
     brunchFull = []
     for rest in restaurantNames:
         if len(assignmentDict[rest]) > cap:
-            print(str(rest) + ' is overassigned')
+            #print(str(rest) + ' is overassigned')
             brunchOverassigned.append(rest)
         elif len(assignmentDict[rest]) < cap:
-            print(str(rest) + ' is underassigned')
+            #print(str(rest) + ' is underassigned')
             brunchUnderassigned.append(rest)
         elif len(assignmentDict[rest]) == cap:
-            print(str(rest) + ' is full')
+            #print(str(rest) + ' is full')
             brunchFull.append(rest)
     return brunchOverassigned, brunchUnderassigned, brunchFull
 brunchOverassigned, brunchUnderassigned, brunchFull = brunchCapacityCheck()
@@ -293,31 +296,33 @@ elif len(brunchOverassigned) > 0 and brunchDone==False:
     for rest in brunchOverassigned:
         brunchList = assignmentDict[rest]
         bumpNum = len(brunchList)-cap
-        bumpOrder = random.shuffle(brunchList) #want to preferentially bump people who haven't yet been bumped.
+        bumpOrder = []
+        bumpOrder = random.sample(brunchList,len(brunchList)) #want to preferentially bump people who haven't yet been bumped.
         gotBumped = []
-        for x in bumpOrder:
-            if len(gotBumped) == bumpNum:
-                break
-            if preferenceScoreDict[x] == 1:
-                gotBumped.append(x)
-            else:
-                continue
-        if len(gotBumped) < bumpNum:
+        if len(bumpOrder) > 0:
             for x in bumpOrder:
                 if len(gotBumped) == bumpNum:
                     break
-                if preferenceScoreDict[x] == 2:
+                if preferenceScoreDict[x] == 1:
                     gotBumped.append(x)
                 else:
                     continue
-        if len(gotBumped) < numpNum:
-            for x in bumpOrder:
-                if len(gotBumped) == bumpNum:
-                    break
-                if preferenceScoreDict[x] == 3:
-                    gotBumped.append(x)
-                else:
-                    continue
+            if len(gotBumped) < bumpNum:
+                for x in bumpOrder:
+                    if len(gotBumped) == bumpNum:
+                        break
+                    if preferenceScoreDict[x] == 2:
+                        gotBumped.append(x)
+                    else:
+                        continue
+            if len(gotBumped) < numpNum:
+                for x in bumpOrder:
+                    if len(gotBumped) == bumpNum:
+                        break
+                    if preferenceScoreDict[x] == 3:
+                        gotBumped.append(x)
+                    else:
+                        continue
         for b in gotBumped:
             assignmentDict[rest].remove(b) #kick that dude out
             assigned.remove(b) #mark them unassigned
