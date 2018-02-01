@@ -1,8 +1,9 @@
 # MONKFISH
 
-![monkfish](https://upload.wikimedia.org/wikipedia/commons/3/30/Monkfish.jpg)
+<a href="url"><img src="https://upload.wikimedia.org/wikipedia/commons/3/30/Monkfish.jpg" align="center" height="300" width="400" ></a>
 
 ##About
+
 __MONKFISH__ solves the wholly inane issue of fairly assigning interviewees to restaurants. Like the actual fish, this algorithm is ugly and surprisingly slimy.
 
 __MONKFISH__ works by first assigning first choice dining establishments and then randomly selecting individuals to be removed. __MONKFISH__ also calculates a cumulative score to preferentially bump people who have not yet been bumped. This should maximize the number of people who receive at least one first choice meal, though this has not been at all tested or verified.
